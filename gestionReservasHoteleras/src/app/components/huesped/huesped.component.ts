@@ -94,7 +94,6 @@ export class HuespedComponent implements OnInit {
     this.form.reset();
     this.isEditing = false;
     this.huespedSeleccionado = undefined;
-    this.limpiarBusqueda();
   }
 
   irANuevo(): void {
@@ -116,11 +115,6 @@ export class HuespedComponent implements OnInit {
       nacionalidad:  h.nacionalidad
     });
     this.vista = 'formulario';
-  }
-
-  irABusqueda(): void {
-    this.limpiarBusqueda();
-    this.vista = 'busqueda';
   }
 
   get huespedesFiltrados(): HuespedResponse[] {
@@ -152,12 +146,7 @@ export class HuespedComponent implements OnInit {
     });
   }
 
-  limpiarBusqueda(): void {
-    this.busquedaId = '';
-    this.busquedaResultado = undefined;
-    this.busquedaError = '';
-    this.buscando = false;
-  }
+
 
   onSubmit(): void {
     if (this.form.invalid) {

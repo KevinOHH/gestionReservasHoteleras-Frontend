@@ -11,9 +11,6 @@
         </div>
       </div>
       <div class="header-actions">
-        <!--<button class="btn btn-secondary" (click)="irABusqueda()">
-          Buscar por ID
-        </button>-->
         <button class="btn btn-primary" (click)="irANuevo()">
           <span class="btn-icon-text">+</span> Nuevo Huésped
         </button>
@@ -182,90 +179,4 @@
     </div>
 
   </ng-container>
-
-  <ng-container *ngIf="vista === 'busqueda'">
-
-    <div class="page-header">
-      <button class="btn-back" (click)="irALista()">Volver</button>
-      <div>
-        <h1 class="page-title">Buscar Huésped por ID</h1>
-        <p class="page-subtitle">Consulta cualquier huésped (activo o eliminado) por su ID</p>
-      </div>
-    </div>
-
-    <div class="alert alert-error search-error" *ngIf="busquedaError">{{ busquedaError }}</div>
-
-    <!-- Barra de búsqueda -->
-    <div class="form-card search-card">
-      <div class="search-bar">
-        <input
-          type="number"
-          class="form-control search-input"
-          placeholder="Ingrese el ID del huésped (ej. 25)"
-          [(ngModel)]="busquedaId"
-          [ngModelOptions]="{standalone: true}"
-          (keyup.enter)="buscarPorId()"
-          min="1">
-        <button class="btn btn-primary" (click)="buscarPorId()" [disabled]="buscando">
-          <span class="spinner-sm" *ngIf="buscando"></span>
-          {{ buscando ? 'Buscando...' : 'Buscar' }}
-        </button>
-        <button class="btn btn-secondary" (click)="limpiarBusqueda()" *ngIf="busquedaResultado || busquedaError">
-          Limpiar
-        </button>
-      </div>
-      <div class="alert alert-error search-error" *ngIf="busquedaError">{{ busquedaError }}</div>
-    </div>
-
-    <div class="detail-card" *ngIf="busquedaResultado">
-
-      <div class="detail-hero">
-        <div class="avatar">{{ iniciales(busquedaResultado) }}</div>
-        <div class="hero-info">
-          <h2>{{ busquedaResultado.nombre }} {{ busquedaResultado.apellido }}</h2>
-          <span class="badge"
-                [class.badge-activo]="busquedaResultado.estadoRegistro === 'ACTIVO'"
-                [class.badge-eliminado]="busquedaResultado.estadoRegistro === 'ELIMINADO'">
-            {{ busquedaResultado.estadoRegistro }}
-          </span>
-        </div>
-      </div>
-
-      <div class="detail-grid">
-        <div class="detail-item">
-          <span class="detail-label">ID</span>
-          <span class="detail-value">#{{ busquedaResultado.id }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Email</span>
-          <span class="detail-value">{{ busquedaResultado.email }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Teléfono</span>
-          <span class="detail-value">{{ busquedaResultado.telefono }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Tipo de Documento</span>
-          <span class="detail-value">{{ busquedaResultado.tipoDocumento }}</span>
-        </div>
-        <div class="detail-item">
-          <span class="detail-label">Nacionalidad</span>
-          <span class="detail-value">{{ busquedaResultado.nacionalidad }}</span>
-        </div>
-      </div>
-
-     <div class="detail-actions" *ngIf="busquedaResultado.estadoRegistro === 'ACTIVO'">
-         <button class="btn btn-primary" (click)="irAEditar(busquedaResultado)">Editar</button>
-         <button class="btn btn-danger" *ngIf="isAdmin()"
-        (click)="eliminar(busquedaResultado)">Eliminar</button>
-     </div>
-
-      <div class="badge-eliminado-info" *ngIf="busquedaResultado.estadoRegistro === 'ELIMINADO'">
-         Este huésped está eliminado. No se pueden realizar acciones sobre él.
-      </div>
-
-    </div>
-
-  </ng-container>
-
 </div>

@@ -34,7 +34,6 @@
         </tbody>
     </table>
 
-    <!-- Modal para registrar usuario -->
     <div class="modal fade" #usuarioModalRef tabindex="-1" aria-labelledby="usuarioModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -85,9 +84,6 @@
                                     {{ transformarRol(rol) }}
                                 </option>
                             </select>
-                            <div class="form-text">
-                                Mantén presionada la tecla Ctrl (Cmd en Mac) para seleccionar múltiples roles
-                            </div>
                             <div *ngIf="usuarioForm.get('roles')?.invalid && usuarioForm.get('roles')?.touched"
                                 class="text-danger small mt-1">
                                 <span *ngIf="usuarioForm.get('roles')?.errors?.['required']">
