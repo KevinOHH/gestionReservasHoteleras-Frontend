@@ -255,9 +255,9 @@
       </div>
 
      <div class="detail-actions" *ngIf="busquedaResultado.estadoRegistro === 'ACTIVO'">
-         <button class="btn btn-primary" (click)="irAEditar(busquedaResultado)">✏️ Editar</button>
+         <button class="btn btn-primary" (click)="irAEditar(busquedaResultado)">Editar</button>
          <button class="btn btn-danger" *ngIf="isAdmin()"
-        (click)="eliminar(busquedaResultado)">🗑️ Eliminar</button>
+        (click)="eliminar(busquedaResultado)">Eliminar</button>
      </div>
 
       <div class="badge-eliminado-info" *ngIf="busquedaResultado.estadoRegistro === 'ELIMINADO'">
