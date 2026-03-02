@@ -103,6 +103,7 @@
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 20px rgba(0,0,0,0.05);
   overflow: hidden;
+  margin-bottom: 50px !important;
 }
 
 .table-meta {

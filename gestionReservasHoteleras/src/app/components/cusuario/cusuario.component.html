@@ -45,8 +45,8 @@
                 </span>
               </td>
               <td class="td-actions">
-                <button class="act-btn act-edit" title="Editar" (click)="irAEditar(u)">ED</button>
-                <button class="act-btn act-delete" title="Eliminar" (click)="eliminar(u)">BR</button>
+                <button class="act-btn act-edit" title="Editar" (click)="irAEditar(u)">✏️</button>
+                <button class="act-btn act-delete" title="Eliminar" (click)="eliminar(u)">🗑️​</button>
               </td>
             </tr>
             <tr *ngIf="usuarios.length === 0">
@@ -89,7 +89,7 @@
           <div class="form-group form-full">
             <label class="form-label">
               Password <span class="req">*</span>
-              <span class="label-hint" *ngIf="isEditing">(dejar vacío para no cambiar)</span>
+              <span class="label-hint" *ngIf="isEditing"></span>
             </label>
             <input type="password" class="form-control"
                    [class.is-invalid]="isInvalid('password')"

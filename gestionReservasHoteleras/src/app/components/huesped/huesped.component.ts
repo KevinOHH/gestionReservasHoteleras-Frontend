@@ -123,6 +123,13 @@ export class HuespedComponent implements OnInit {
     this.vista = 'busqueda';
   }
 
+  get huespedesFiltrados(): HuespedResponse[] {
+  if (this.isAdmin()) {
+    return this.huespedes;
+  }
+  return this.huespedes.filter(h => h.estadoRegistro === 'ACTIVO');
+}
+
   buscarPorId(): void {
     const id = parseInt(this.busquedaId, 10);
     if (!id || id <= 0) {

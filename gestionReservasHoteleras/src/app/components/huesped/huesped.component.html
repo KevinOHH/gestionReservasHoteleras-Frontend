@@ -11,9 +11,9 @@
         </div>
       </div>
       <div class="header-actions">
-        <button class="btn btn-secondary" (click)="irABusqueda()">
+        <!--<button class="btn btn-secondary" (click)="irABusqueda()">
           Buscar por ID
-        </button>
+        </button>-->
         <button class="btn btn-primary" (click)="irANuevo()">
           <span class="btn-icon-text">+</span> Nuevo Huésped
         </button>
@@ -29,7 +29,7 @@
 
     <div class="table-card" *ngIf="!loading">
       <div class="table-meta">
-        <span class="table-count">{{ huespedes.length }} registros</span>
+        <span class="table-count">{{ huespedesFiltrados.length }} registros</span>
       </div>
       <div class="table-wrapper">
         <table class="h-table">
@@ -46,7 +46,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let h of huespedes"
+            <tr *ngFor="let h of huespedesFiltrados"
                 [class.row-eliminado]="h.estadoRegistro === 'ELIMINADO'">
               <td class="td-id">#{{ h.id }}</td>
               <td class="td-nombre">{{ h.nombre }} {{ h.apellido }}</td>
@@ -64,13 +64,13 @@
               <td class="td-actions">
                 <button class="act-btn act-edit" title="Editar"
                         *ngIf="isAdmin() && h.estadoRegistro === 'ACTIVO'"
-                        (click)="irAEditar(h)">ED</button>
+                        (click)="irAEditar(h)">✏️​</button>
                 <button class="act-btn act-delete" title="Eliminar"
                         *ngIf="isAdmin() && h.estadoRegistro === 'ACTIVO'"
-                        (click)="eliminar(h)">EL</button>
+                        (click)="eliminar(h)">🗑️​</button>
               </td>
             </tr>
-            <tr *ngIf="huespedes.length === 0">
+            <tr *ngIf="huespedesFiltrados.length === 0">
               <td colspan="7" class="empty-row">No hay huéspedes registrados.</td>
             </tr>
           </tbody>

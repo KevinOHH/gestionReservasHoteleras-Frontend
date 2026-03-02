@@ -85,6 +85,15 @@ export class CUsuarioComponent implements OnInit {
   }
 
   irAEditar(u: CUsuarioResponse): void {
+    if (u.estadoRegistro === 'ELIMINADO') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Accion no permitida',
+        text: 'No es posible interactuar con un usuario eliminado',
+        confirmButtonColor: '#2563eb'
+      });
+      return;
+    }
     this.isEditing = true;
     this.usuarioId = u.id;
     this.form.patchValue({
@@ -137,6 +146,15 @@ export class CUsuarioComponent implements OnInit {
   }
 
   eliminar(u: CUsuarioResponse): void {
+    if (u.estadoRegistro === 'ELIMINADO') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Accion no permitida',
+        text: 'No es posible interactuar con un usuario eliminado',
+        confirmButtonColor: '#2563eb'
+      });
+      return;
+    }
     Swal.fire({
       title: '¿Eliminar usuario?',
       text: `"${u.username}" será marcado como eliminado.`,
