@@ -9,6 +9,7 @@ import { CUsuarioComponent } from './components/cusuario/cusuario.component';
 import { RoleGuard } from './guards/role.guard';
 import { AuthGuard } from './guards/auth.guard';
 import { Roles } from './constants/Roles';  
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full'},

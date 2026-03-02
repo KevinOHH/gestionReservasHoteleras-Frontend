@@ -15,6 +15,7 @@ import { ReservasComponent } from './components/reservas/reservas.component';
 import { HabitacionesComponent } from './components/habitaciones/habitaciones.component';
 import { HuespedComponent } from './components/huesped/huesped.component';
 import { CUsuarioComponent } from './components/cusuario/cusuario.component';
+import { UsuariosComponent } from './components/usuarios/usuarios.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { CUsuarioComponent } from './components/cusuario/cusuario.component';
     DashboardComponent,
     LoginComponent,
     ReservasComponent,
-    HabitacionesComponent
+    HabitacionesComponent,
+    UsuariosComponent
   ],
   imports: [
     BrowserModule,
