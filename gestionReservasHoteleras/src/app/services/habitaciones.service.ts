@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of } from 'rxjs';
-import { HabitacionRequest, HabitacionResponse } from '../models/Habitacion.models';
+import { HabitacionRequest, HabitacionResponse } from '../models/Habitacion.model';
 
 
 @Injectable({ providedIn: 'root' })
@@ -63,16 +63,7 @@ export class HabitacionService {
     );
   }
 
-  // Obtener habitaciones por tipo
-  getByTipo(tipo: TipoHabitacion): Observable<HabitacionResponse[]> {
-    return this.http.get<HabitacionResponse[]>(`${this.apiUrl}/tipo/${tipo}`).pipe(
-      map(habitaciones => habitaciones.sort((a, b) => a.numero - b.numero)),
-      catchError(error => {
-        console.error('Error al obtener habitaciones por tipo: ', error);
-        return of([]);
-      })
-    );
-  }
+  
 
   // Obtener habitaciones disponibles
   getDisponibles(): Observable<HabitacionResponse[]> {
