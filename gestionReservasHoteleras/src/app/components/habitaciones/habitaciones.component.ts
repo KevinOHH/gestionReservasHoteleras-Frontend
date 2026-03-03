@@ -12,10 +12,10 @@ type Vista = 'lista' | 'formulario' | 'busqueda';
   selector: 'app-habitacion',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
-  templateUrl: './habitacion.component.html',
-  styleUrls: ['./habitacion.component.css']
+  templateUrl: './habitaciones.component.html',
+  styleUrls: ['./habitaciones.component.css']
 })
-export class HabitacionComponent implements OnInit {
+export class HabitacionesComponent implements OnInit {
 
   vista: Vista = 'lista';
   isEditing = false;
