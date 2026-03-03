@@ -15,7 +15,7 @@ export class HabitacionService {
   // Obtener todas las habitaciones
   getAll(): Observable<HabitacionResponse[]> {
     return this.http.get<HabitacionResponse[]>(this.apiUrl).pipe(
-      map(habitaciones => habitaciones.sort((a, b) => a.numero - b.numero)), // Ordena por número
+      map(habitaciones => habitaciones.sort((a, b) => a.numero - b.numero)),
       catchError(error => {
         console.error('Error al obtener las habitaciones: ', error);
         return of([]);
