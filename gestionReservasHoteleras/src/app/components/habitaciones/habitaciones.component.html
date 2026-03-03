@@ -40,7 +40,7 @@
               <th>Capacidad</th>
               <th>Estado Habitación</th>
 
-              <!-- 👇 SOLO ADMIN -->
+            
               <th *ngIf="isAdmin()">Estado</th>
 
               <th>Acciones</th>
@@ -70,7 +70,7 @@
                         title="Editar"
                         *ngIf="isAdmin()"
                         (click)="irAEditar(h)">
-                  ED
+                  
                 </button>
 
                 <button class="act-btn act-delete"
@@ -83,7 +83,7 @@
             </tr>
 
             <tr *ngIf="habitaciones.length === 0">
-              <!-- 👇 colspan dinámico -->
+              
               <td [attr.colspan]="isAdmin() ? 8 : 7" class="empty-row">
                 No hay habitaciones registradas.
               </td>
@@ -132,7 +132,7 @@
         <div class="detail-item">
           <span class="detail-label">Estado</span>
 
-          <!-- 🔥 CORREGIDO -->
+          
           <span class="detail-value">
             {{ busquedaResultado.estadoHabitacion }}
           </span>
@@ -142,12 +142,12 @@
       <div class="detail-actions" *ngIf="isAdmin()">
         <button class="btn btn-primary"
                 (click)="irAEditar(busquedaResultado)">
-          ✏️ Editar
+        
         </button>
 
         <button class="btn btn-danger"
                 (click)="eliminar(busquedaResultado)">
-          🗑️ Eliminar
+      
         </button>
       </div>
 
