@@ -5,6 +5,10 @@ import { AuthService } from '../../services/auth.service';
 import { ReservasService } from '../../services/reservas.service';
 import { Roles } from '../../constants/Roles';
 import Swal from 'sweetalert2';
+import { HuespedResponse } from '../../models/Huesped.model';
+import { HabitacionResponse } from '../../models/Habitacion.model';
+import { HuespedService } from '../../services/huesped.service';
+import { HabitacionService } from '../../services/habitaciones.service';
 
 declare var bootstrap: any;
 
@@ -16,6 +20,8 @@ declare var bootstrap: any;
 })
 export class ReservasComponent implements OnInit, AfterViewInit {
   listaReservas: ReservaResponse[] = [];
+  listaHuespedes: HuespedResponse[] = [];
+  listaHabitaciones: HabitacionResponse[] = [];
 
   isEditMode: boolean = false;
   selectedReserva: ReservaResponse | null = null;
@@ -30,7 +36,8 @@ export class ReservasComponent implements OnInit, AfterViewInit {
 
   private modalInstance!: any;
 
-  constructor(private fb: FormBuilder, private reservaService: ReservasService, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private reservaService: ReservasService, 
+    private authService: AuthService, private huespedService: HuespedService, private habitacionService: HabitacionService) {
     this.reservaForm = this.fb.group({
       id: [null],
       idHuesped: [null, [Validators.required]],
@@ -43,8 +50,24 @@ export class ReservasComponent implements OnInit, AfterViewInit {
     });
   }
 
+  cargarHuespedes(): void {
+    this.huespedService.getAll().subscribe({
+      next: resp => this.listaHuespedes = resp.filter(hu => hu.estadoRegistro === 'ACTIVO'),
+      error: err => console.error('Error al cargar huéspedes', err)
+    });
+  }
+
+  cargarHabitaciones(): void {
+    this.habitacionService.getAll().subscribe({
+      next: resp => this.listaHabitaciones = resp.filter(ha => ha.estadoHabitacion === 'DISPONIBLE'),
+      error: err => console.error('Error al cargar habitaciones', err)
+    });
+  }
+
   ngOnInit(): void {
     this.listarReservas();
+    this.cargarHuespedes();
+    this.cargarHabitaciones();
     if (this.authService.hasRole(Roles.USER)) {
       this.showActionsUser = true;
     }
@@ -97,7 +120,16 @@ export class ReservasComponent implements OnInit, AfterViewInit {
   }
 
   onSubmit():void {
-    if (this.reservaForm.invalid) return;
+    if (this.reservaForm.invalid) {
+      this.reservaForm.markAllAsTouched();
+      Swal.fire({
+        icon: 'warning',
+        title: 'Formulario incompleto',
+        text: 'Por favor complete todos los campos correctamente.',
+        confirmButtonColor: '#2563eb'
+      });
+      return;
+    }
     
     const reservaData: ReservaRequest = this.reservaForm.value;
     
@@ -213,5 +245,4 @@ private formatarFechaParaInput(fechaBackend: string): string {
     { id: 3, descripcion: 'FINALIZADA' },
     { id: 4, descripcion: 'CANCELADA' }
   ];
-
 }
