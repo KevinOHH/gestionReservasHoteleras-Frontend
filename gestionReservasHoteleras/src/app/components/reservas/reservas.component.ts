@@ -158,7 +158,7 @@ export class ReservasComponent implements OnInit, AfterViewInit {
         }
       });
   }
-
+/*
   buscarReservaPorId(): void {
   const id = parseInt(this.busquedaPorId, 10);
   if (!id) {
@@ -183,8 +183,8 @@ export class ReservasComponent implements OnInit, AfterViewInit {
     }
   });
 }
+*/
 
-  // Dentro de tu clase ReservasComponent
   estadosLista = [
     { id: 1, descripcion: 'CONFIRMADA' },
     { id: 2, descripcion: 'EN_CURSO' },
