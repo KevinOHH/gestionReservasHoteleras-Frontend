@@ -12,5 +12,6 @@ export interface HabitacionResponse {
   precio: number;
   capacidad: number;
   estadoHabitacion: 'DISPONIBLE' | 'OCUPADA' | 'MANTENIMIENTO';
+  estado: string;
 }
 

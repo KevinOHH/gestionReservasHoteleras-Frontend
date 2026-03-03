@@ -35,8 +35,10 @@ export class ReservasComponent implements OnInit, AfterViewInit {
       id: [null],
       idHuesped: [null, [Validators.required]],
       idHabitacion: [null, [Validators.required]],
-      fechaEntrada: ['', [Validators.required, Validators.pattern(/^([0-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4} ([0-1][0-9]|2[0-3]):[0-5][0-9]$/)]],
-      fechaSalida: ['', [Validators.required, Validators.pattern(/^([0-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4} ([0-1][0-9]|2[0-3]):[0-5][0-9]$/)]],
+      fechaEntrada: ['', [Validators.required]],
+      fechaSalida: ['', [Validators.required]],
+      //fechaEntrada: ['', [Validators.required, Validators.pattern(/^([0-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4} ([0-1][0-9]|2[0-3]):[0-5][0-9]$/)]],
+      //fechaSalida: ['', [Validators.required, Validators.pattern(/^([0-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4} ([0-1][0-9]|2[0-3]):[0-5][0-9]$/)]],
       idEstadoReserva: [null, [Validators.required]]
     });
   }
@@ -87,8 +89,8 @@ export class ReservasComponent implements OnInit, AfterViewInit {
     this.reservaForm.patchValue({
       idHuesped: reserva.huesped.id,
       idHabitacion: reserva.habitacion.id,
-      fechaEntrada: reserva.fechaEntrada,
-      fechaSalida: reserva.fechaSalida,
+      fechaEntrada: this.formatarFechaParaInput(reserva.fechaEntrada),
+    fechaSalida: this.formatarFechaParaInput(reserva.fechaSalida),
       idEstadoReserva: estadoEncontrado ? estadoEncontrado.id : null
     });
     this.modalInstance.show();
@@ -99,6 +101,9 @@ export class ReservasComponent implements OnInit, AfterViewInit {
     
     const reservaData: ReservaRequest = this.reservaForm.value;
     
+    reservaData.fechaEntrada = this.formatarFechaParaBackend(reservaData.fechaEntrada);
+    reservaData.fechaSalida = this.formatarFechaParaBackend(reservaData.fechaSalida);
+
     if (this.isEditMode && this.selectedReserva){
       this.reservaService.putReserva(reservaData, this.selectedReserva.id).subscribe({
         next: (registro) => {
@@ -184,6 +189,23 @@ export class ReservasComponent implements OnInit, AfterViewInit {
   });
 }
 */
+
+  private formatarFechaParaBackend(fechaIso: string): string {
+  if (!fechaIso) return '';
+  const d = new Date(fechaIso);
+  const pad = (n: number) => n.toString().padStart(2, '0');
+  
+  // Retorna "DD/MM/YYYY HH:mm"
+  return `${pad(d.getDate())}/${pad(d.getMonth() + 1)}/${d.getFullYear()} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+private formatarFechaParaInput(fechaBackend: string): string {
+  if (!fechaBackend) return '';
+  // Si viene "DD/MM/YYYY HH:mm", convertir a "YYYY-MM-DDTHH:mm" para el input
+  const [fecha, hora] = fechaBackend.split(' ');
+  const [dia, mes, anio] = fecha.split('/');
+  return `${anio}-${mes}-${dia}T${hora}`;
+}
 
   estadosLista = [
     { id: 1, descripcion: 'CONFIRMADA' },
