@@ -95,6 +95,116 @@
 
   </ng-container>
 
+<!-- ===================== FORMULARIO ===================== -->
+  <ng-container *ngIf="vista === 'formulario'">
+
+    <div class="page-header">
+      <button class="btn-back" (click)="irALista()">← Volver</button>
+      <div>
+        <h1 class="page-title">
+          {{ isEditing ? 'Editar Habitación' : 'Nueva Habitación' }}
+        </h1>
+        <p class="page-subtitle">
+          {{ isEditing ? 'Modifique los datos de la habitación' : 'Complete los campos para registrar' }}
+        </p>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+
+        <div class="form-grid">
+
+          <!-- Número -->
+          <div class="form-group">
+            <label class="form-label">Número <span class="req">*</span></label>
+            <input type="number"
+                   class="form-control"
+                   [class.is-invalid]="isInvalid('numero')"
+                   formControlName="numero"
+                   placeholder="Ej. 101">
+          </div>
+
+          <!-- Tipo -->
+          <div class="form-group">
+            <label class="form-label">Tipo <span class="req">*</span></label>
+            <select class="form-control"
+                    [class.is-invalid]="isInvalid('tipoHabitacion')"
+                    formControlName="tipoHabitacion">
+              <option value="">-- Seleccione --</option>
+              <option *ngFor="let t of tiposHabitacion" [value]="t">
+                {{ t }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Precio -->
+          <div class="form-group">
+            <label class="form-label">Precio <span class="req">*</span></label>
+            <input type="number"
+                   step="0.01"
+                   class="form-control"
+                   [class.is-invalid]="isInvalid('precio')"
+                   formControlName="precio"
+                   placeholder="Ej. 1500.00">
+          </div>
+
+          <!-- Capacidad -->
+          <div class="form-group">
+            <label class="form-label">Capacidad <span class="req">*</span></label>
+            <input type="number"
+                   class="form-control"
+                   [class.is-invalid]="isInvalid('capacidad')"
+                   formControlName="capacidad"
+                   placeholder="Ej. 2">
+          </div>
+
+          <!-- Estado Habitación -->
+          <div class="form-group form-full">
+            <label class="form-label">Estado Habitación <span class="req">*</span></label>
+            <select class="form-control"
+                    [class.is-invalid]="isInvalid('estadoHabitacion')"
+                    formControlName="estadoHabitacion">
+              <option value="">-- Seleccione --</option>
+              <option *ngFor="let e of estadosHabitacion" [value]="e.value">
+                {{ e.value }} - {{ e.descripcion }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Estado 
+          <div class="form-group form-full">
+            <label class="form-label">Estado <span class="req">*</span></label>
+            <input type="text"
+                   class="form-control"
+                   [class.is-invalid]="isInvalid('estado')"
+                   formControlName="estado"
+                   placeholder="Ej. ACTIVO">
+          </div>
+          -->
+        </div>
+
+        <div class="form-actions">
+          <button type="button"
+                  class="btn btn-secondary"
+                  (click)="irALista()"
+                  [disabled]="submitting">
+            Cancelar
+          </button>
+
+          <button type="submit"
+                  class="btn btn-primary"
+                  [disabled]="submitting">
+            <span class="spinner-sm" *ngIf="submitting"></span>
+            {{ submitting ? 'Guardando...' : (isEditing ? 'Actualizar' : 'Registrar') }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+
+  </ng-container>
+
   <!-- ===================== BUSQUEDA ===================== -->
   <ng-container *ngIf="vista === 'busqueda'">
 
