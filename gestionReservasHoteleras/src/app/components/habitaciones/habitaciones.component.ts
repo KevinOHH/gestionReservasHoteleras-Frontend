@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { HabitacionService } from '../../services/habitacion.service';
-import { HabitacionResponse } from '../../models/Habitacion.model';
 import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
+import { HabitacionResponse } from '../../models/Habitacion.model';
+import { HabitacionService } from '../../services/habitacion.service';
+import { Roles } from '../../constants/Roles';
 
 type Vista = 'lista' | 'formulario' | 'busqueda';
 
@@ -12,8 +13,8 @@ type Vista = 'lista' | 'formulario' | 'busqueda';
   selector: 'app-habitacion',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, FormsModule],
-  templateUrl: './habitacion.component.html',
-  styleUrls: ['./habitacion.component.css']
+  templateUrl: './habitaciones.component.html',
+  styleUrls: ['./habitaciones.component.css']
 })
 export class HabitacionComponent implements OnInit {
 
@@ -28,7 +29,7 @@ export class HabitacionComponent implements OnInit {
   busquedaError: string = '';
   buscando: boolean = false;
 
-  tiposHabitacion = ['SENCILLA', 'DOBLE', 'SUITE'];
+  tiposHabitacion = ['INDIVIDUAL', 'DOBLE', 'SUITE'];
 
   estadosHabitacion = [
     { value: 'DISPONIBLE', descripcion: 'Lista para asignarse' },
@@ -58,8 +59,8 @@ export class HabitacionComponent implements OnInit {
       tipoHabitacion: ['', [Validators.required]],
       precio: ['', [Validators.required]],
       capacidad: ['', [Validators.required]],
-      estadoHabitacion: ['', [Validators.required]],
-      estado: ['', [Validators.required]]
+      estadoHabitacion: ['', [Validators.required]]
+      //estado: ['ACTIVO', [Validators.required]]
     });
   }
 
@@ -67,7 +68,11 @@ export class HabitacionComponent implements OnInit {
     this.loading = true;
     this.habitacionService.getAll().subscribe({
       next: (data) => {
-        this.habitaciones = data;
+        //if (this.authService.hasRole(Roles.ADMIN)) {
+          this.habitaciones = data;
+        //} else {
+          //this.habitaciones = data.filter(h => h.estado !== 'ELIMINADO');
+        //}
         this.loading = false;
       },
       error: (err) => {
@@ -102,11 +107,11 @@ export class HabitacionComponent implements OnInit {
     this.habitacionId = h.id;
     this.form.patchValue({
       numero: h.numero,
-      tipoHabitacion: h.tipoHabitacion,
+      tipoHabitacion: h.tipo,
       precio: h.precio,
       capacidad: h.capacidad,
-      estadoHabitacion: h.estadoHabitacion,
-      estado: h.estado
+      estadoHabitacion: h.estadoHabitacion
+      //estado: h.estado
     });
     this.vista = 'formulario';
   }

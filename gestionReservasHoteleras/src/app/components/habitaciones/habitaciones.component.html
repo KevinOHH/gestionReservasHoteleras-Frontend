@@ -47,7 +47,7 @@
             <tr *ngFor="let h of habitaciones">
               <td class="td-id">#{{ h.id }}</td>
               <td class="td-nombre">{{ h.numero }}</td>
-              <td>{{ h.tipoHabitacion }}</td>
+              <td>{{ h.tipo }}</td>
               <td>${{ h.precio }}</td>
               <td>{{ h.capacidad }}</td>
 
@@ -167,16 +167,16 @@
             </select>
           </div>
 
-          <!-- Estado -->
+          <!-- Estado 
           <div class="form-group form-full">
             <label class="form-label">Estado <span class="req">*</span></label>
             <input type="text"
                    class="form-control"
                    [class.is-invalid]="isInvalid('estado')"
                    formControlName="estado"
-                   placeholder="Ej. ACTIVA">
+                   placeholder="Ej. ACTIVO">
           </div>
-
+          -->
         </div>
 
         <div class="form-actions">
@@ -266,7 +266,7 @@
         </div>
         <div class="detail-item">
           <span class="detail-label">Tipo</span>
-          <span class="detail-value">{{ busquedaResultado.tipoHabitacion }}</span>
+          <span class="detail-value">{{ busquedaResultado.tipo }}</span>
         </div>
         <div class="detail-item">
           <span class="detail-label">Precio</span>
