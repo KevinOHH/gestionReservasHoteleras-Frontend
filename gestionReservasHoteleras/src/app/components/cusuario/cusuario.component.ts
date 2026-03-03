@@ -183,7 +183,7 @@ export class CUsuarioComponent implements OnInit {
 
   rolLabel(roles: string[]): string {
     if (!roles || roles.length === 0) return '-';
-    return roles[0] === 'ROLE_ADMIN' ? 'Administrador' : 'Recepcionista';
+    return roles[0] === 'ROLE_ADMIN' ? 'Administrador' : 'Usuario';
   }
 
   private resolverError(err: any): string {

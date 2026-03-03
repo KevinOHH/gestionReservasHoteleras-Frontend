@@ -196,45 +196,54 @@ export class HuespedComponent implements OnInit {
     });
   }
 
-  eliminar(h: HuespedResponse): void {
-    Swal.fire({
-      title: '¿Eliminar huésped?',
-      text: `${h.nombre} ${h.apellido} será marcado como eliminado.`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#ef4444',
-      cancelButtonColor: '#6b7280',
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (!result.isConfirmed) return;
+eliminar(h: HuespedResponse): void {
+  Swal.fire({
+    title: '¿Eliminar huésped?',
+    text: `${h.nombre} ${h.apellido} será marcado como eliminado.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#6b7280',
+    confirmButtonText: 'Sí, eliminar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (!result.isConfirmed) return;
 
-      this.huespedService.delete(h.id).subscribe({
-        next: () => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Eliminado',
-            text: 'El huésped fue eliminado correctamente.',
-            confirmButtonColor: '#2563eb',
-            timer: 2000,
-            timerProgressBar: true
-          });
-          this.cargarLista();
-          if (this.vista === 'busqueda' && this.busquedaResultado) {
-            this.buscarPorId();
-          }
-        },
-        error: (err) => {
-          Swal.fire({
-            icon: 'error',
-            title: 'No se pudo eliminar',
-            text: this.resolverError(err),
-            confirmButtonColor: '#2563eb'
-          });
+    this.huespedService.delete(h.id).subscribe({
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: 'Eliminado',
+          text: 'El huésped fue eliminado correctamente.',
+          confirmButtonColor: '#2563eb',
+          timer: 2000,
+          timerProgressBar: true
+        });
+        this.cargarLista();
+        if (this.vista === 'busqueda' && this.busquedaResultado) {
+          this.buscarPorId();
         }
-      });
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: err.status === 403 ? 'warning' : 'error',
+          title: err.status === 403 ? '⚠️ Acción no permitida' : 'No se pudo eliminar',
+          text: this.resolverErrorEliminar(err),
+          confirmButtonColor: '#2563eb'
+        });
+      }
     });
+  });
+}
+
+private resolverErrorEliminar(err: any): string {
+  switch (err.status) {
+    case 403: return err.error?.message ?? 'No se puede eliminar el huésped porque tiene reservas CONFIRMADAS o EN_CURSO.';
+    case 404: return 'Huésped no encontrado.';
+    case 401: return 'No autorizado. Inicie sesión nuevamente.';
+    default:  return 'Error interno del servidor. Intente más tarde.';
   }
+}
 
   isAdmin(): boolean {
     return this.authService.hasRole('ROLE_ADMIN');
