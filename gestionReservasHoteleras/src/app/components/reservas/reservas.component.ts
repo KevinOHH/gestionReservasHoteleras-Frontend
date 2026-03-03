@@ -19,8 +19,10 @@ export class ReservasComponent implements OnInit, AfterViewInit {
 
   isEditMode: boolean = false;
   selectedReserva: ReservaResponse | null = null;
-  showActions: boolean = false;
+  showActionsAdmin: boolean = false;
+  showActionsUser: boolean = false;
   modalText: string = 'Registrar Reserva';
+  busquedaPorId: string = '';
 
   @ViewChild('reservaModalRef')
   reservaModalEl!: ElementRef;
@@ -41,8 +43,12 @@ export class ReservasComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.listarReservas();
+    if (this.authService.hasRole(Roles.USER)) {
+      this.showActionsUser = true;
+    }
     if (this.authService.hasRole(Roles.ADMIN)) {
-      this.showActions = true;
+      this.showActionsUser = true;
+      this.showActionsAdmin = true;
     }
   }
 
@@ -79,10 +85,8 @@ export class ReservasComponent implements OnInit, AfterViewInit {
     const estadoEncontrado = this.estadosLista.find(e => e.descripcion === reserva.estadoReserva);
 
     this.reservaForm.patchValue({
-      idHuesped: reserva.huesped.id, // O el ID/Documento si es un select
+      idHuesped: reserva.huesped.id,
       idHabitacion: reserva.habitacion.id,
-      //fechaEntrada: this.formatToISODate(reserva.fechaEntrada),
-      //fechaSalida: this.formatToISODate(reserva.fechaSalida),
       fechaEntrada: reserva.fechaEntrada,
       fechaSalida: reserva.fechaSalida,
       idEstadoReserva: estadoEncontrado ? estadoEncontrado.id : null
@@ -143,14 +147,44 @@ export class ReservasComponent implements OnInit, AfterViewInit {
   }
 
   listarReservas(): void {
-    this.reservaService.getReservas().subscribe({
-      next: resp => {
-        this.listaReservas = resp;
-      }
-    });
+    
+      this.reservaService.getReservas().subscribe({
+        next: resp => {
+          if (this.authService.hasRole(Roles.ADMIN)) {
+            this.listaReservas = resp;
+          } else {
+            this.listaReservas = resp.filter(reserva => reserva.estadoRegistro !== 'ELIMINADO');
+          }
+        }
+      });
   }
+/*
+  buscarReservaPorId(): void {
+  const id = parseInt(this.busquedaPorId, 10);
+  if (!id) {
+    this.listarReservas();
+    return;
+  }
+  
+  this.reservaService.getById(id).subscribe({
+    next: resp => {
+      const isAdmin = this.authService.hasRole(Roles.ADMIN);
+      const isEliminado = resp.estadoRegistro === 'ELIMINADO';
 
-  // Dentro de tu clase ReservasComponent
+      if (!isAdmin && isEliminado) {
+        Swal.fire('No encontrado', 'La reserva no existe o ha sido eliminada', 'info');
+        this.listaReservas = [];
+      } else {
+        this.listaReservas = [resp];
+      }
+    },
+    error: () => {
+      Swal.fire('Error', 'No se encontró la reserva con ID ' + id, 'error');
+    }
+  });
+}
+*/
+
   estadosLista = [
     { id: 1, descripcion: 'CONFIRMADA' },
     { id: 2, descripcion: 'EN_CURSO' },

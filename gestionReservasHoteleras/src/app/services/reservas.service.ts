@@ -23,6 +23,15 @@ export class ReservasService {
     );
   }
 
+  getById(id: number): Observable<ReservaResponse> {
+      return this.http.get<ReservaResponse>(`${this.apiUrl}/${id}`).pipe(
+        catchError(error => {
+          console.error('Error al obtener la reserva por id: ', error);
+          throw error;
+        })
+      );
+    }
+
   postReservas(reserva: ReservaRequest): Observable<ReservaResponse>{
     return this.http.post<ReservaResponse>(this.apiUrl, reserva).pipe(
       catchError(error => {
