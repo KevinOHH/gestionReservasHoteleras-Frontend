@@ -1,11 +1,11 @@
 <div class="container-fluid mt-4">
-    <h2>Reservas</h2>
-    <div class="d-flex justify-content-between mb-3">
-        <button *ngIf="showActionsAdmin || showActionsUser" (click)="toggleForm()" class="btn btn-success">
-          <i class="fa fa-plus"></i>
-            Registrar Reserva
-        </button>
-        <!-- 
+  <h2>Reservas</h2>
+  <div class="d-flex justify-content-between mb-3">
+    <button *ngIf="showActionsAdmin || showActionsUser" (click)="toggleForm()" class="btn btn-success">
+      <i class="fa fa-plus"></i>
+      Registrar Reserva
+    </button>
+    <!-- 
         <div>
           <input type="number" placeholder="Buscar por Id de Reservación" 
           (keyup.enter)="buscarReservaPorId()" min="1"
@@ -16,40 +16,40 @@
           </button>
         </div>
           -->
-    </div>
-    <table class="table table-striped table-bordered mt-3">
-        <thead class="table-dark">
-            <tr style="text-align: center;">
-                <th scope="col">#</th>
-                <th scope="col">Huesped</th>
-                <th scope="col">Habitacion</th>
-                <th scope="col">Fecha de Entrada</th>
-                <th scope="col">Fecha de Salida</th>
-                <th scope="col">Estado de la Reserva</th>
-                <th scope="col">Estado del registro</th>
-                <th scope="col">Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr style="text-align: center;" *ngFor="let reserva of listaReservas">
-                <td>{{ reserva.id }}</td>
-                <td>{{ reserva.huesped?.nombre }}</td>
-                <td>{{ reserva.habitacion?.numero }}</td>
-                <td>{{ reserva.fechaEntrada }}</td>
-                <td>{{ reserva.fechaSalida }}</td>
-                <td>{{ reserva.estadoReserva }}</td>
-                <td>{{ reserva.estadoRegistro }}</td>
-                <td *ngIf="showActionsAdmin || showActionsUser">
-                    <button (click)="editReserva(reserva)" class="btn btn-primary btn-sm me-1 ms-1"
-                    *ngIf="reserva.estadoRegistro !== 'ELIMINADO'"><!-- [disabled]="reserva.estadoRegistro === 'ELIMINADO'" -->
-                        <i class="fa fa-edit"></i> Editar</button>
-                    <button (click)="deleteReserva(reserva.id)" class="btn btn-danger btn-sm ms-1"
-                    *ngIf="reserva.estadoRegistro !== 'ELIMINADO'">
-                        <i class="fa fa-trash"></i> Eliminar</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+  </div>
+  <table class="table table-striped table-bordered mt-3">
+    <thead class="table-dark">
+      <tr style="text-align: center;">
+        <th scope="col">#</th>
+        <th scope="col">Huesped</th>
+        <th scope="col">Habitacion</th>
+        <th scope="col">Fecha de Entrada</th>
+        <th scope="col">Fecha de Salida</th>
+        <th scope="col">Estado de la Reserva</th>
+        <th scope="col">Estado del registro</th>
+        <th scope="col">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="text-align: center;" *ngFor="let reserva of listaReservas">
+        <td>{{ reserva.id }}</td>
+        <td>{{ reserva.huesped?.nombre }}</td>
+        <td>{{ reserva.habitacion?.numero }}</td>
+        <td>{{ reserva.fechaEntrada }}</td>
+        <td>{{ reserva.fechaSalida }}</td>
+        <td>{{ reserva.estadoReserva }}</td>
+        <td>{{ reserva.estadoRegistro }}</td>
+        <td *ngIf="showActionsAdmin || showActionsUser">
+          <button (click)="editReserva(reserva)" class="btn btn-primary btn-sm me-1 ms-1"
+            *ngIf="reserva.estadoRegistro !== 'ELIMINADO' && reserva.estadoReserva !== 'FINALIZADA' && reserva.estadoReserva !== 'CANCELADA'">
+            <i class="fa fa-edit"></i> Editar</button>
+          <button (click)="deleteReserva(reserva.id)" class="btn btn-danger btn-sm ms-1"
+            *ngIf="reserva.estadoRegistro !== 'ELIMINADO' && reserva.estadoReserva !== 'FINALIZADA' && reserva.estadoReserva !== 'CANCELADA'">
+            <i class="fa fa-trash"></i> Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <div class="modal fade" #reservaModalRef tabindex="-1" aria-labelledby="reservaModalLabel" aria-hidden="true">
@@ -57,12 +57,11 @@
     <div class="modal-content">
       <div class="modal-header bg-dark text-white">
         <h5 class="modal-title" id="reservaModalLabel">{{ modalText }}</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-          aria-label="Cerrar"></button>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
       </div>
       <div class="modal-body">
         <form [formGroup]="reservaForm" (ngSubmit)="onSubmit()">
-          
+
           <div class="row">
             <div class="col-md-4 mb-3">
               <label class="form-label">Id del huesped</label>
@@ -86,9 +85,9 @@
 
             <div class="col-md-4 mb-3">
               <label class="form-label">Fecha de salida</label>
-              <input type="datetime-local" class="form-control" formControlName="fechaSalida"> 
+              <input type="datetime-local" class="form-control" formControlName="fechaSalida">
               <!-- <input class="form-control" formControlName="fechaSalida">-->
-            </div>  
+            </div>
           </div>
 
           <div class="row">
@@ -96,13 +95,13 @@
               <label class="form-label">Estado de la Reserva</label>
               <select class="form-select" formControlName="idEstadoReserva">
                 <option [ngValue]="null" disabled>Seleccionar...</option>
-                  <option *ngFor="let est of estadosLista" [ngValue]="est.id">
-                    {{ est.descripcion }}
-                  </option>
+                <option *ngFor="let est of estadosLista" [ngValue]="est.id">
+                  {{ est.descripcion }}
+                </option>
               </select>
             </div>
           </div>
-          
+
           <div class="text-end">
             <button type="submit" class="btn btn-success" [disabled]="reservaForm.invalid">
               Guardar
