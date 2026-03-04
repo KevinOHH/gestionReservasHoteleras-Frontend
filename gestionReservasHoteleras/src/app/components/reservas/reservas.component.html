@@ -74,7 +74,7 @@
               -->
               <select class="form-select" formControlName="idHabitacion">
                 <option [ngValue]="null" disabled>Seleccionar...</option>
-                <option *ngFor="let habitacion of listaHabitaciones" [ngValue]="habitacion.estadoRegistro">
+                <option *ngFor="let habitacion of listaHabitaciones" [ngValue]="habitacion.id">
                   {{ habitacion.numero }}
                 </option>
               </select>
