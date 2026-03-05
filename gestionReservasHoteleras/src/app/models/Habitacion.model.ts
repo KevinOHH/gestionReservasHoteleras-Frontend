@@ -12,6 +12,6 @@ export interface HabitacionResponse {
   precio: number;
   capacidad: number;
   estadoHabitacion: 'DISPONIBLE' | 'OCUPADA' | 'LIMPIEZA'|'MANTENIMIENTO';
-  estadoRegistro: 'ACTIVO'|'ELIMINADO';
+  estado: 'ACTIVO'|'ELIMINADO';
 }
 

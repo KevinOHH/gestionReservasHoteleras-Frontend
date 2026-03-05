@@ -9,6 +9,7 @@ import { HuespedResponse } from '../../models/Huesped.model';
 import { HabitacionResponse } from '../../models/Habitacion.model';
 import { HuespedService } from '../../services/huesped.service';
 import { HabitacionService } from '../../services/habitaciones.service';
+import { DatosHabitacion } from '../../models/DatosHabitacion.model';
 
 declare var bootstrap: any;
 
@@ -21,7 +22,7 @@ declare var bootstrap: any;
 export class ReservasComponent implements OnInit, AfterViewInit {
   listaReservas: ReservaResponse[] = [];
   listaHuespedes: HuespedResponse[] = [];
-  listaHabitaciones: HabitacionResponse[] = [];
+  listaHabitaciones: DatosHabitacion[] = [];
 
   isEditMode: boolean = false;
   selectedReserva: ReservaResponse | null = null;
@@ -29,6 +30,7 @@ export class ReservasComponent implements OnInit, AfterViewInit {
   showActionsUser: boolean = false;
   modalText: string = 'Registrar Reserva';
   busquedaPorId: string = '';
+  minFecha: string = '';
 
   @ViewChild('reservaModalRef')
   reservaModalEl!: ElementRef;
@@ -49,7 +51,9 @@ export class ReservasComponent implements OnInit, AfterViewInit {
       idHabitacion: [null, [Validators.required]],
       fechaEntrada: ['', [Validators.required]],
       fechaSalida: ['', [Validators.required]],
-      idEstadoReserva: [null, [Validators.required]]
+      //fechaEntrada: ['', [Validators.required, Validators.pattern(/^([0-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4} ([0-1][0-9]|2[0-3]):[0-5][0-9]$/)]],
+      //fechaSalida: ['', [Validators.required, Validators.pattern(/^([0-2][0-9]|3[0-1])\/(0[1-9]|1[0-2])\/\d{4} ([0-1][0-9]|2[0-3]):[0-5][0-9]$/)]],
+      idEstadoReserva: [null]
     });
   }
 
@@ -68,6 +72,19 @@ export class ReservasComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    const ahora = new Date();
+    // Ponemos segundos y milisegundos en 0 para evitar conflictos de validación
+    ahora.setSeconds(0, 0);
+    
+    // Formato YYYY-MM-DDTHH:mm requerido por el navegador
+    const anio = ahora.getFullYear();
+    const mes = (ahora.getMonth() + 1).toString().padStart(2, '0');
+    const dia = ahora.getDate().toString().padStart(2, '0');
+    const horas = ahora.getHours().toString().padStart(2, '0');
+    const minutos = ahora.getMinutes().toString().padStart(2, '0');
+    
+    this.minFecha = `${anio}-${mes}-${dia}T${horas}:${minutos}`;
+
     this.listarReservas();
     this.cargarHuespedes();
     this.cargarHabitaciones();
@@ -103,6 +120,14 @@ export class ReservasComponent implements OnInit, AfterViewInit {
   toggleForm(): void {
     this.resetForm();
     this.modalText = 'Registrar Reserva';
+
+    this.isEditMode = false;
+
+    // ELIMINAR VALIDACIÓN para registro nuevo
+    const estadoControl = this.reservaForm.get('idEstadoReserva');
+    estadoControl?.clearValidators(); 
+    estadoControl?.updateValueAndValidity(); // Avisa a Angular del cambio
+
     this.modalInstance.show();
   }
 
@@ -111,6 +136,14 @@ export class ReservasComponent implements OnInit, AfterViewInit {
     this.selectedReserva = reserva;
     this.modalText = 'Editando Reserva: ' + reserva.id;
 
+    const existe = this.listaHabitaciones.find(h => h.id === reserva.habitacion.id);
+  if (!existe) {
+    this.listaHabitaciones.push(reserva.habitacion);
+  }
+
+    const estadoControl = this.reservaForm.get('idEstadoReserva');
+    estadoControl?.setValidators([Validators.required]);
+    estadoControl?.updateValueAndValidity();
     const estadoEncontrado = this.estadosLista.find(e => e.descripcion === reserva.estadoReserva);
 
     const habitacionEnLista = this.listaHabitaciones.find(h => h.id === reserva.habitacion.id);
@@ -328,9 +361,12 @@ export class ReservasComponent implements OnInit, AfterViewInit {
 
   private formatarFechaParaInput(fechaBackend: string): string {
     if (!fechaBackend) return '';
-    const [fecha, hora] = fechaBackend.split(' ');
+    const [fecha, horaCompleta] = fechaBackend.split(' ');
     const [dia, mes, anio] = fecha.split('/');
-    return `${anio}-${mes}-${dia}T${hora}`;
+    
+    const [horas, minutos] = horaCompleta.split(':');
+    const horaLimpia = `${horas}:${minutos}`;
+    return `${anio}-${mes}-${dia}T${horaLimpia}`;
   }
 
   estadosLista = [

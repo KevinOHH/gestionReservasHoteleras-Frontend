@@ -11,7 +11,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 
         return next.handle(req).pipe(
             catchError((err: HttpErrorResponse) => {
-                const mensaje = err.error?.mensaje || 'Ocurrio un error inesperado';
+                const mensaje = err.error?.message || 'Ocurrio un error inesperado';
                 const estatus = err.status;
 
                 if(req.url.includes("login")) {
